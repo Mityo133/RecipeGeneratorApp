@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  animation: myAnimation 25s infinite;
+}
+
+@keyframes myAnimation {
+  0%   { background-color: rgb(161, 247, 232); }
+  50%  { background-color: rgb(3, 77, 146); }
+  100% { background-color: rgb(161, 247, 232); }
+}
+.round-boton{
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  background-color:rgb(0, 102, 255);
+}
+.round-boton:hover{
+  background-color: rgb(23, 23, 105);
+  border-radius: 15px;
+}
+.text {
+  animation-name: TextChangesColors;
+  animation-duration: 12s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes TextChangesColors {
+  0% { color: white; }
+  25% { color: cyan; }
+  50% { color: rgb(15, 34, 143); }
+  75% { color: cyan; }
+  100% { color: white; }
+}

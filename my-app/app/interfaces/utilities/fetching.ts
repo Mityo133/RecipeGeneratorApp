@@ -1,0 +1,99 @@
+import axios from 'axios'
+import { FullRecipe, FavoriteFood, Favorite_Food } from "../obj";
+const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { createClient } from "@supabase/supabase-js";
+if (!supabaseURL || !supabaseKey) {
+  // This will now only log if the variables are truly missing from your .env.local file
+  console.error("Supabase configuration missing");
+}
+
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+const host: string = "http://localhost:4000";
+
+export async function GetAllRecipes() {
+  const fetched = await axios.get(`${host}/get-all-recipes`);
+  const data = fetched.data;
+  return data as FullRecipe[];
+}
+export async function SendRecipe(promt: string) {
+  const fetched = await axios.post(`${host}/generate-recipe`, { "ingredients": promt });
+  const data = fetched.data;
+  console.log(data);
+  return data.doneres;
+}
+export async function GetRecipeById(id: string) {
+  const fetched = await axios.get(`${host}/get-recipe-by-id/${id}`);
+  const data = fetched.data;
+  console.log(data);
+  return data as FullRecipe;
+}
+export async function Registration(email: string, password: string) {
+  try {
+    const fetched = await axios.post(`${host}/sign-up`, { email, password });
+    return {
+      message: "Account has benn logged",
+      account: fetched
+    }
+  } catch (err) {
+    console.error(err);
+    throw ("There has been an errro with your registration");
+  }
+}
+
+export async function LoginUser(email: string, password: string) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    return {
+      message: error.message,
+      err: error,
+      data: null,
+    };
+  }
+
+  return {
+    message: "Login successful",
+    data,
+    err: null,
+  };
+}
+export async function AddFavoriteFood(emailId: string, recipeId: string) {
+  try {
+    const fetched = await axios.post(`${host}/AddMealToUsersList`, { "userId": emailId, "mealId": recipeId });
+    const data = fetched;
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return {
+      message: "The recipe couldn't be added!"
+    }
+  }
+}
+
+export async function ExtracRecipeByFavoriteId(email: string) {
+  try {
+      const userMeals = await supabase
+      .from('favorite_meals')
+      .select('recipe_id')
+      .eq("user_id", email);
+    const mapped: string[] = userMeals.data?.map((meal) => meal.recipe_id) ?? [];
+    const datoss:Favorite_Food = {
+      message: "You have got the data Yupi!",
+      recipe_id: mapped as string[]
+    };
+    return datoss
+  } catch (error) {
+    return {
+      message: "You did not get the data",
+      err: error
+    } as Favorite_Food
+  }
+}
