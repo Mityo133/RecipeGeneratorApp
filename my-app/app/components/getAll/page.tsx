@@ -24,7 +24,7 @@ export default function GetAll() {
             if (!user) {
                 router.push("/components/login"); // Redirect if not logged in
                 return;
-            }else{
+            } else {
                 fetchRecipes();
             }
         });
@@ -39,7 +39,7 @@ export default function GetAll() {
                 <input type="text" id="search" value={(search)} onChange={(e) => setSearch(e.target.value)} /><button onClick={() => {
                     const filtered = arr.filter((recipe) => recipe.recipe.name.toLowerCase().includes(search.toLowerCase()));
                     setSearchedRes(filtered);
-                }} className="bg-cyan-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded">Search</button>
+                }} className="bg-cyan-400 hover:bg-purple-400 text-white font-bold py-2 px-4 rounded">Search</button>
                 {arr.length === 0 ? (
                     <p>No recipes found</p>
                 ) : (
