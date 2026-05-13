@@ -16,7 +16,7 @@ export default function Card({ data }: CardProps) {
     }
 
     return <>
-        <div className="max-w-4xl mx-auto p-6">
+        <div className="max-w-4xl mx-auto p-6 bg-gray-950 rounded-2xl">
             {/* Hero Section */}
             <div className="relative rounded-2xl overflow-hidden mb-8">
                 <Image
@@ -26,7 +26,7 @@ export default function Card({ data }: CardProps) {
                     alt={data.recipe.name}
                     className="w-full h-64 md:h-96 object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <div className="absolute inset-0 from-black/70 to-transparent " />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                     <h1 className="text-4xl font-bold text-white mb-2">
                         {data.recipe.name}

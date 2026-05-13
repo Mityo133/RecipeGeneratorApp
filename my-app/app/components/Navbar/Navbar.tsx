@@ -33,22 +33,22 @@ export default function Navbar() {
   if (loading) return <nav className="p-4 border-b">Loading...</nav>;
 
   return (
-    <nav className="p-4 mb-4 flex gap-4 border-b items-center bg-gray-900/55">
+    <nav className="p-4 mb-4 flex gap-4 border-b items-center bg-gray-900/55/1 backdrop-blur-lg shadow-md border-b border-gray-800/50 rounded-xl">
       <Link
         href="/"
-        className="bg-cyan-400 hover:bg-purple-700 text-white rounded-lg p-2"
+        className="bg-gradient-to-br from-cyan-400 to-blue-500 hover:from-purple-500 hover:to-indigo-600 text-white font-semibold rounded-lg p-3 shadow-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
       >
         Home
       </Link>
       <Link
         href="/components/getAll"
-        className="bg-cyan-400 hover:bg-purple-700 text-white rounded-lg p-2"
+        className="bg-gradient-to-br from-cyan-400 to-blue-500 hover:from-purple-500 hover:to-indigo-600 text-white font-semibold rounded-lg p-3 shadow-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
       >
         GetAllRecipes
       </Link>
       <Link
         href="/components/send"
-        className="bg-cyan-400 hover:bg-purple-700 text-white rounded-lg p-2"
+        className="bg-gradient-to-br from-cyan-400 to-blue-500 hover:from-purple-500 hover:to-indigo-600 text-white font-semibold rounded-lg p-3 shadow-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
       >
         SendRecipe
       </Link>
@@ -56,16 +56,16 @@ export default function Navbar() {
         <>
           <Link
             href="/components/favfoods"
-            className="bg-cyan-400 hover:bg-purple-700 text-white rounded-lg p-2">Favorite Foods</Link>
+            className="bg-gradient-to-br from-cyan-400 to-blue-500 hover:from-purple-500 hover:to-indigo-600 text-white font-semibold rounded-lg p-3 shadow-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-cyan-400 focus:outline-none">Favorite Foods</Link>
         </>
       ) : (<>
       </>)}
-      <div className="ml-auto flex gap-4 items-center">
+      <div className="ml-auto flex gap-3 items-center">
         {user ? (
           <>
-            <span className="text-sm text-shadow-amber-50">{user.email}</span>
+            <span className="text-sm text-gray-300 font-medium bg-gray-800/50 px-3 py-1 rounded-lg">{user.email}</span>
             <button
-              className="bg-cyan-400 hover:bg-purple-700 text-white rounded-lg p-2"
+              className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold rounded-lg p-3 shadow-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-red-400 focus:outline-none"
               onClick={() => { supabase.auth.signOut() }}
             >
               Logout
@@ -75,13 +75,13 @@ export default function Navbar() {
           <>
             <Link
               href="/components/register"
-              className="bg-cyan-400 hover:bg-purple-700 text-white rounded-lg p-2"
+              className="bg-gradient-to-br from-cyan-400 to-blue-500 hover:from-purple-500 hover:to-indigo-600 text-white font-semibold rounded-lg p-3 shadow-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
             >
               Register
             </Link>
             <Link
               href="/components/login"
-              className="bg-cyan-400 hover:bg-purple-700 text-white rounded-lg p-2"
+              className="bg-gradient-to-br from-cyan-400 to-blue-500 hover:from-purple-500 hover:to-indigo-600 text-white font-semibold rounded-lg p-3 shadow-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
             >
               Login
             </Link>
