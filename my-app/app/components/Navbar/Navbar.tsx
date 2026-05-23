@@ -1,4 +1,5 @@
 'use client'
+import {redirect, RedirectType} from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { supabase } from "@/app/interfaces/utilities/fetching";
@@ -66,7 +67,9 @@ export default function Navbar() {
             <span className="text-sm text-gray-300 font-medium bg-gray-800/50 px-3 py-1 rounded-lg">{user.email}</span>
             <button
               className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-semibold rounded-lg p-3 shadow-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-red-400 focus:outline-none"
-              onClick={() => { supabase.auth.signOut() }}
+              onClick={() => { supabase.auth.signOut();
+                redirect("/", RedirectType.push);
+               }}
             >
               Logout
             </button>

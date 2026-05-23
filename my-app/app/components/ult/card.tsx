@@ -1,6 +1,6 @@
 'use client'
 import React from "react";
-import { FullRecipe } from "../../interfaces/obj";
+import { FullRecipe, } from "../../interfaces/obj";
 import Image from 'next/image'
 interface CardProps {
     data: FullRecipe;

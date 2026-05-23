@@ -1,5 +1,12 @@
 import error from "next/dist/api/error";
 
+export interface favorite_meals{
+    err?:error
+    id?:string
+    message?:string
+    recipe_id?:string
+}
+
 export interface Recipe {
     name: string;
     imageURL: string;

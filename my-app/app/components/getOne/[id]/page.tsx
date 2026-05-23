@@ -6,7 +6,7 @@ export default async function Page({ params }: Props) {
   const { id } = await params; // ✅ THIS is the fix
 
   return <>
-  <Details id={id} />;
+  <Details id={id} />
   
   </>
 }

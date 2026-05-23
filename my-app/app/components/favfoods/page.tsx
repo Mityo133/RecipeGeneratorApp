@@ -36,41 +36,58 @@ export default function FavoriteFood() {
         getFoods();
     }, []);
     return (
-        <>
-            {loading ? (
-                <h1>Loading....</h1>
-            ) : recipe != null ? (
-                recipe.length > 0 ? (
-                    <div className="grid grid-cols-3 gap-2 p-6">
-                        {recipe.map((fullRes) => (
-                            <div
-                                key={fullRes.recipe.id}
-                                className="border rounded h-72 w-52 bg-gray-500 p-4"
-                            >
-                                <div className="w-full h-40 relative overflow-hidden rounded">
-                                    <Link href={`/components/getOne/${fullRes.recipe.id}`}>
-                                    <Image
-                                        src={fullRes.recipe.imageURL}
-                                        fill
-                                        className="object-cover"
-                                        alt={fullRes.recipe.name}
-                                    />
-                                    </Link>
-                                </div>
-                                <br></br>
-                                <button className='round-boton'><Link href={`/components/getOne/${fullRes.recipe.id}`}>
-
-                                    {fullRes.recipe.name}
-                                </Link></button>
-                            </div>
-                        ))}
+        <>{loading ? (
+    <h1 className="text-center text-lg font-medium text-gray-500 my-4">
+        Loading....
+    </h1>
+) : recipe != null ? (
+    recipe.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-6">
+            {recipe.map((fullRes) => (
+                <div
+                    key={fullRes.recipe.id}
+                    className="rounded-lg bg-white border border-gray-200 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group"
+                >
+                    <div className="relative h-40 w-full overflow-hidden rounded-t-lg">
+                        <Link 
+                            href={`/components/getOne/${fullRes.recipe.id}`}
+                            className="block"
+                        >
+                            <Image
+                                src={fullRes.recipe.imageURL}
+                                fill
+                                alt={fullRes.recipe.name}
+                                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                        </Link>
+                        
                     </div>
-                ) : (
-                    <>There is no recipe</>
-                )
-            ) : (
-                <h1>Loading!!</h1>
-            )}
+                    <div className="p-4">
+                        <button className='w-full block text-center rounded-md bg-blue-600 text-white font-medium py-2 hover:bg-blue-700 transition-colors duration-200'>
+                            <Link 
+                                href={`/components/getOne/${fullRes.recipe.id}`}
+                                className="block"
+                            >
+                                {fullRes.recipe.name}
+                            </Link>
+                        </button>
+                    </div>
+                </div>
+            ))}
+        </div>
+    ) : (
+        <div className="text-center p-8">
+            <h2 className="text-xl font-semibold text-gray-400">
+                There is no recipe
+            </h2>
+        </div>
+    )
+) : (
+    <h1 className="text-center text-lg font-medium text-yellow-500 my-4">
+        Loading!!
+    </h1>
+)}
+
         </>
     );
 }

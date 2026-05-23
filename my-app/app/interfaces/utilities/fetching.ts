@@ -97,3 +97,40 @@ export async function ExtracRecipeByFavoriteId(email: string) {
     } as Favorite_Food
   }
 }
+
+export async function GetTheUsersMeals(user_id:string,recipe_id:string){
+  try{
+    const userMeals = await supabase
+      .from('favorite_meals')
+      .select('recipe_id')
+      .eq("user_id", user_id);
+    const mapped: string[] = userMeals.data?.map((meal) => meal.recipe_id) ?? [];
+    if(mapped.includes(recipe_id)){
+      return true as boolean;
+    }
+    return false as boolean;
+  }catch(error){
+    return false as boolean;
+  }
+}
+
+export async function RemoveFavoriteFood(user_id:string,recipe_id:string){
+    try{
+     
+    const { error } = await supabase
+      .from('favorite_meals')
+      .delete()
+      .eq('user_id', user_id)
+      .eq('recipe_id', recipe_id)
+
+      if(error){
+        console.error(error);
+        return false as boolean;
+      }
+      return true as boolean;
+    }
+    catch(error){
+        console.error(error);
+        return false as boolean;
+    }
+}

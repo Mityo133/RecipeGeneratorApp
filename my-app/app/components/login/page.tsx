@@ -1,5 +1,5 @@
 'use client'
-
+import {redirect, RedirectType} from "next/navigation";
 import { useState } from "react";
 import { LoginUser } from "@/app/interfaces/utilities/fetching";
 import Link from "next/link";
@@ -63,6 +63,7 @@ export default function Login() {
 
                                                         console.log("User:", res.data.user);
                                                         console.log("Session:", res.data.session);
+                                                        redirect("/",RedirectType.push);
                                                 }}
                                                 className="w-full rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-3 font-semibold text-white shadow-lg transition-all hover:from-purple-500 hover:to-indigo-600 hover:scale-[1.02] hover:shadow-cyan-500/25 focus:ring-2 focus:ring-cyan-400 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                                                 type="button"
