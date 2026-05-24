@@ -54,7 +54,7 @@ export default function Button({ mealId }: { mealId: string }) {
                     }
                 };
                 getUser();
-                redirect("/", RedirectType.push);
+                
             }}>
             Add Favorite Food
         </button>
