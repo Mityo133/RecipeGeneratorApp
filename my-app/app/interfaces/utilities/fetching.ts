@@ -134,3 +134,14 @@ export async function RemoveFavoriteFood(user_id:string,recipe_id:string){
         return false as boolean;
     }
 }
+
+export async function ForgotPassword(email: string) {
+  try {
+    const fetched = await axios.post(`${host}/forgot-password`, { email });
+    return fetched.data;
+  } catch (error: any) {
+    console.error("ForgotPassword error:", error);
+    const errorMsg = error.response?.data?.error || "Failed to request password reset.";
+    return { error: errorMsg };
+  }
+}

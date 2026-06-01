@@ -12,6 +12,7 @@ import {
 } from "./methods/database";
 import { generateText } from "./methods/ai";
 import path from 'path';
+import {translateToEnglish} from './methods/translating'
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 4000;
@@ -171,7 +172,8 @@ app.get("/", (req, res) => {
 app.post("/generate-recipe", async (req, res) => {
     try {
         const { ingredients } = req.body;
-        const recipe: Recipe = await generateText(ingredients);
+        const result = await translateToEnglish(ingredients)
+        const recipe: Recipe = await generateText(result.translation);
         const recipeId = await insertRecipe(recipe);
         await insertIngridients(recipe.ingredients, recipeId);
         await insertInstructions(recipe.instructions, recipeId);

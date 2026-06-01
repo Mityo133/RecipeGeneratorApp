@@ -1,208 +1,226 @@
 'use client'
 import { useState, useEffect } from "react";
-import { FullRecipe } from "../../interfaces/obj";
 import { useRouter } from "next/navigation";
-import { GetAllRecipes, supabase } from "../../interfaces/utilities/fetching"
+import { FullRecipe } from "../../interfaces/obj";
+import { GetAllRecipes, supabase } from "../../interfaces/utilities/fetching";
 import Link from "next/link";
-
-// Ensure these types/interfaces exist in your project for this to compile
-// interface FullRecipe { recipe: { id: number; name: string; description: string; tags: string[]; ingredients: string[] } }
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, Clock, FileText, ChevronRight, Inbox, Sparkles, Loader2 } from "lucide-react";
 
 export default function GetAll() {
-    const [arr, setArr] = useState<FullRecipe[]>([]);
-    const [searchedRes, setSearchedRes] = useState<FullRecipe[]>([]);
-    const [search, setSearch] = useState("");
-    const [isLoading, setIsLoading] = useState(true);
-    const router = useRouter();
+  const [arr, setArr] = useState<FullRecipe[]>([]);
+  const [searchedRes, setSearchedRes] = useState<FullRecipe[]>([]);
+  const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
-    useEffect(() => {
-        const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                router.push("/components/login");
-            }
-        };
-        
-        // Run user check first
-        checkUser();
-        // Run fetch immediately after
-        fetchRecipes();
-    }, [router]);
-
-    const fetchRecipes = async () => {
-        try {
-            setIsLoading(true);
-            const res = await GetAllRecipes();
-            setArr(res);
-            // Update search results on initial load
-            setSearchedRes(res);
-        } catch (error) {
-            console.error("Error fetching recipes:", error);
-        } finally {
-            setIsLoading(false);
-        }
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push("/components/login");
+      }
     };
 
-    const handleSearch = () => {
-        if (!search) {
-            // Reset to all recipes if search is empty
-            setSearchedRes(arr);
-        } else {
-            const filtered = arr.filter((fullRecipe) => 
-                fullRecipe.recipe.name.toLowerCase().includes(search.toLowerCase()) ||
-                (fullRecipe.recipe.tags?.some(tag => {
-                    const tagName = typeof tag === 'string' ? tag : tag.names;
-                    return tagName?.toLowerCase().includes(search.toLowerCase());
-                }))
-            );
-            setSearchedRes(filtered);
-        }
-    };
+    checkUser();
+    fetchRecipes();
+  }, [router]);
 
-    if (isLoading) {
-        return (
-            <div className="p-6 max-w-7xl mx-auto min-h-[50vh]">
-                <div className="mb-8 h-8 bg-gray-800 rounded animate-pulse w-1/3"></div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[...Array(6)].map((_, i) => (
-                        <div key={i} className="bg-gray-800/30 h-64 rounded-xl animate-pulse"></div>
-                    ))}
-                </div>
-            </div>
-        )
+  const fetchRecipes = async () => {
+    try {
+      setIsLoading(true);
+      const res = await GetAllRecipes();
+      setArr(res);
+      setSearchedRes(res);
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
+  const handleSearch = () => {
+    if (!search) {
+      setSearchedRes(arr);
+    } else {
+      const filtered = arr.filter((fullRecipe) => 
+        fullRecipe.recipe.name.toLowerCase().includes(search.toLowerCase()) ||
+        (fullRecipe.recipe.tags?.some(tag => {
+          const tagName = typeof tag === 'string' ? tag : tag.names;
+          return tagName?.toLowerCase().includes(search.toLowerCase());
+        }))
+      );
+      setSearchedRes(filtered);
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 260, damping: 25 } }
+  };
+
+  if (isLoading) {
     return (
-        <div className="p-6 max-w-7xl mx-auto bg-gray-900 min-h-screen">
-            {/* Header & Search Section */}
-            <div className="mb-10 flex flex-col items-center justify-center text-center">
-                <h1 className="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
-                    <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
-                        Discover Recipes
-                    </span>
-                </h1>
-                <p className="text-gray-400 max-w-lg mb-8 text-lg">
-                    Explore our collection of culinary masterpieces crafted with precision.
-                </p>
-                
-                {/* Enhanced Search UI */}
-                <div className="w-full max-w-2xl relative group">
-                    {/* Outer Glow Effect */}
-                    <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl opacity-20 group-hover:opacity-40 transition duration-500 blur"></div>
-                    
-                    {/* Inner Search Input */}
-                    <div className="relative flex items-center bg-gray-800 rounded-xl overflow-hidden border border-gray-700 
-                        focus-within:border-cyan-400 focus-within:ring-2 focus-within:ring-cyan-500/50 
-                        transition-all duration-300 ease-in-out">
-                        <svg 
-                            className="w-6 h-6 text-gray-400 ml-4" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            viewBox="0 0 24 24"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        <input
-                            type="text"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                            placeholder="Search by name or ingredient..."
-                            className="w-full bg-transparent text-white placeholder-gray-500 px-4 py-3 focus:outline-none focus:ring-0"
-                        />
-                        <button
-                            onClick={handleSearch}
-                            className="mr-2 bg-cyan-600 hover:bg-cyan-700 text-white px-5 py-2 rounded-lg font-medium transition-colors shadow-lg hover:shadow-cyan-500/50"
-                        >
-                            Search
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Content Area */}
-            {searchedRes.length === 0 ? (
-                <div className="text-center py-20 bg-gray-800/30 rounded-3xl border border-gray-700 border-dashed">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-800 mb-4">
-                        <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                        </svg>
-                    </div>
-                    <p className="text-xl text-gray-300 font-medium">No recipes found</p>
-                    <p className="text-gray-500 mt-2">Try adjusting your search terms.</p>
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {searchedRes.map((fullRecipe, index) => {
-                        const recipe = fullRecipe.recipe;
-                        return (
-                            <Link 
-                                key={recipe.id} 
-                                href={`/components/getOne/${recipe.id}`} 
-                                className="block group"
-                            >
-                                <div className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 
-                                    hover:border-cyan-500/50 
-                                    hover:shadow-[0_0_30px_-10px_rgba(6,182,212,0.3)] 
-                                    transition-all duration-300 ease-out 
-                                    transform hover:-translate-y-2 
-                                    h-full flex flex-col">
-                                    
-                                    {/* Tag Container */}
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        {recipe.tags.slice(0, 3).map((tag, tIndex: number) => (
-                                            <span key={tIndex} className="text-xs font-semibold px-3 py-1 rounded-full 
-                                                bg-gray-700 text-gray-300 border border-gray-600 
-                                                group-hover:bg-cyan-900/30 group-hover:text-cyan-300 transition-colors duration-300">
-                                                {typeof tag === 'string' ? tag : tag.names}
-                                            </span>
-                                        ))}
-                                        {recipe.tags.length > 3 && (
-                                            <span className="text-xs text-gray-500 px-2 py-1">+{recipe.tags.length - 3} more</span>
-                                        )}
-                                    </div>
-
-                                    {/* Title */}
-                                    <h2 className="text-xl font-bold text-gray-100 mb-3 font-['Playfair+Display']">
-                                        {recipe.name}
-                                    </h2>
-
-                                    {/* Description */}
-                                    <p className="text-gray-400 mb-6 line-clamp-3 text-sm leading-relaxed flex-grow">
-                                        {recipe.description}
-                                    </p>
-
-                                    {/* Footer: Time & Ingredients */}
-                                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-gray-700/50">
-                                        {/* Prep Time Badge */}
-                                        <div className="flex items-center gap-2">
-                                            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                                            <span className="text-xs text-gray-300 font-medium">
-                                                {recipe.prepTime} min
-                                            </span>
-                                        </div>
-
-                                        {/* Ingredients Count */}
-                                        <div className="flex items-center gap-1 text-gray-300">
-                                            <svg
-                                                className="w-4 h-4 text-gray-500 group-hover:text-cyan-400 transition-colors"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                            </svg>
-                                            <span className="text-xs font-medium">
-                                                {fullRecipe.ingridients?.length || 0} {fullRecipe.ingridients?.length === 1 ? "ingredient" : "ingredients"}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-                        );
-                    })}
-                </div>
-            )}
+      <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-[70vh] flex flex-col justify-center space-y-10">
+        <div className="text-center space-y-3">
+          <div className="h-6 bg-zinc-900/60 border border-white/[0.04] rounded-full animate-pulse w-32 mx-auto" />
+          <div className="h-10 bg-zinc-900/40 rounded-xl animate-pulse w-72 mx-auto" />
+          <div className="h-4 bg-zinc-900/20 rounded w-96 mx-auto" />
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="bg-zinc-900/[0.15] border border-white/[0.04] h-60 rounded-2xl animate-pulse flex flex-col p-6 space-y-4">
+              <div className="flex gap-2">
+                <div className="h-5 w-16 bg-zinc-800 rounded-lg" />
+                <div className="h-5 w-16 bg-zinc-800 rounded-lg" />
+              </div>
+              <div className="h-6 w-3/4 bg-zinc-800 rounded-md" />
+              <div className="h-12 w-full bg-zinc-800/40 rounded-lg" />
+              <div className="mt-auto h-5 w-full bg-zinc-800/20 rounded" />
+            </div>
+          ))}
+        </div>
+      </div>
     );
+  }
+
+  return (
+    <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen relative space-y-12">
+      {/* Header & Search Console */}
+      <section className="flex flex-col items-center justify-center text-center space-y-4 relative z-10">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.02] border border-white/[0.06] text-xs font-semibold text-cyan-400 uppercase tracking-wider">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Curated Cookbook Records</span>
+        </div>
+        
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
+          Discover{" "}
+          <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">
+            Chef Blueprints
+          </span>
+        </h1>
+        <p className="text-zinc-400 max-w-lg text-sm sm:text-base leading-relaxed">
+          Explore gourmet recipes engineered with detailed macronutrients and step-by-step culinary blueprints.
+        </p>
+
+        {/* Minimal Search Input */}
+        <div className="w-full max-w-lg relative pt-4 group">
+          <div className="relative flex items-center bg-[#0a0a0f]/60 rounded-xl border border-white/[0.06] focus-within:border-cyan-500/40 focus-within:ring-4 focus-within:ring-cyan-500/5 transition-all duration-300 overflow-hidden">
+            <Search className="w-4 h-4 text-zinc-500 ml-4 flex-shrink-0" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              placeholder="Search by ingredients, tags, names..."
+              className="w-full bg-transparent text-white placeholder-zinc-600 px-4 py-3.5 text-xs font-semibold focus:outline-none"
+            />
+            <button
+              onClick={handleSearch}
+              className="mr-2 px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-bold text-xs transition-all duration-200 cursor-pointer shadow-lg active:scale-95"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Grid Content */}
+      <AnimatePresence mode="wait">
+        {searchedRes.length === 0 ? (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            className="text-center py-20 rounded-2xl bg-zinc-900/[0.08] border border-white/[0.04] border-dashed max-w-md mx-auto flex flex-col items-center justify-center space-y-4"
+          >
+            <div className="p-3.5 rounded-xl bg-zinc-900 border border-white/[0.06] text-zinc-500">
+              <Inbox className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-white tracking-tight">No Blueprints Compiled</h3>
+            <p className="text-zinc-500 text-xs max-w-xs leading-relaxed">
+              We couldn&apos;t find matching records. Try a different ingredient search query.
+            </p>
+          </motion.div>
+        ) : (
+          <motion.div 
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10"
+          >
+            {searchedRes.map((fullRecipe) => {
+              const recipe = fullRecipe.recipe;
+              return (
+                <motion.div
+                  key={recipe.id}
+                  variants={itemVariants}
+                  whileHover={{ y: -4 }}
+                  className="rounded-2xl bg-zinc-900/[0.15] border border-white/[0.04] backdrop-blur-md hover:border-zinc-800 transition-all duration-300 flex flex-col h-full relative overflow-hidden group"
+                >
+                  <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  <div className="p-6 flex flex-col h-full space-y-4">
+                    {/* Tag Badges */}
+                    <div className="flex flex-wrap gap-1">
+                      {recipe.tags.slice(0, 3).map((tag, tIndex: number) => (
+                        <span 
+                          key={tIndex} 
+                          className="text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-md bg-white/[0.02] border border-white/[0.06] text-zinc-400 group-hover:text-cyan-400 group-hover:border-cyan-500/10 transition-colors duration-300"
+                        >
+                          {typeof tag === 'string' ? tag : tag.names}
+                        </span>
+                      ))}
+                      {recipe.tags.length > 3 && (
+                        <span className="text-[9px] text-zinc-600 font-bold px-2 py-0.5 bg-white/[0.01] rounded-md border border-white/[0.03]">
+                          +{recipe.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Title */}
+                    <h2 className="text-lg font-bold text-white tracking-tight leading-tight group-hover:text-cyan-400 transition-colors duration-300">
+                      {recipe.name}
+                    </h2>
+
+                    {/* Description */}
+                    <p className="text-zinc-400 text-xs leading-relaxed line-clamp-3 flex-grow font-normal">
+                      {recipe.description}
+                    </p>
+
+                    {/* Footer stats */}
+                    <div className="pt-4 border-t border-white/[0.04] flex items-center justify-between">
+                      <div className="flex items-center gap-1 text-zinc-400 text-xs font-semibold">
+                        <Clock className="w-3.5 h-3.5 text-cyan-400" />
+                        <span>{recipe.prepTime} Mins</span>
+                      </div>
+
+                      <Link 
+                        href={`/components/getOne/${recipe.id}`} 
+                        className="inline-flex items-center gap-1 text-xs font-bold text-white hover:text-cyan-400 transition-all duration-200 group/btn"
+                      >
+                        <FileText className="w-3.5 h-3.5 text-zinc-500 group-hover/btn:text-cyan-400 transition-colors" />
+                        <span>{fullRecipe.ingridients?.length || 0} Ingr.</span>
+                        <ChevronRight className="w-3.5 h-3.5 text-zinc-600 group-hover/btn:text-white group-hover/btn:translate-x-0.5 transition-all" />
+                      </Link>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 }
