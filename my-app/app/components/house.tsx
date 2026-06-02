@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Sparkles, ArrowRight, BookOpen, Brain, Zap, Clock, ShieldCheck, Terminal } from "lucide-react";
+import { Sparkles, ArrowRight, BookOpen, Brain, Zap, ShieldCheck, Terminal } from "lucide-react";
 
 export default function House() {
   const containerVariants = {
@@ -10,18 +10,18 @@ export default function House() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.05,
+        staggerChildren: 0.09,
+        delayChildren: 0.04,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
+    hidden: { opacity: 0, y: 18 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: "spring" as const, stiffness: 260, damping: 25 },
+      transition: { type: "spring" as const, stiffness: 280, damping: 26 },
     },
   };
 
@@ -29,78 +29,86 @@ export default function House() {
     {
       icon: Brain,
       title: "AI-Powered Intuition",
-      description: "Convert any arbitrary set of leftover ingredients or specific macronutrient profiles into five-star culinary blueprints instantly.",
-      color: "from-cyan-500/10 to-blue-500/10",
-      textColor: "text-cyan-400",
-      iconColor: "text-cyan-400 border-cyan-500/10",
+      description: "Convert any set of leftover ingredients or specific macronutrient profiles into five-star culinary blueprints instantly.",
+      accentColor: "rgba(34, 211, 238, 0.8)",
+      borderAccent: "rgba(34, 211, 238, 0.12)",
+      bgAccent: "rgba(34, 211, 238, 0.04)",
     },
     {
       icon: Zap,
       title: "Precision Nutrients",
-      description: "Receive real-time, comprehensive nutritional metrics detailing prep times, exact calories, and calibrated macronutrient content.",
-      color: "from-purple-500/10 to-indigo-500/10",
-      textColor: "text-purple-400",
-      iconColor: "text-purple-400 border-purple-500/10",
+      description: "Real-time, comprehensive nutritional metrics — exact calories, prep times, and calibrated macronutrient content.",
+      accentColor: "rgba(168, 85, 247, 0.8)",
+      borderAccent: "rgba(168, 85, 247, 0.12)",
+      bgAccent: "rgba(168, 85, 247, 0.04)",
     },
     {
       icon: BookOpen,
       title: "Curation Engine",
-      description: "Maintain a visually matching digital cookbook loaded with quick bookmarks, active tags, and interactive progress checklists.",
-      color: "from-amber-500/10 to-rose-500/10",
-      textColor: "text-amber-400",
-      iconColor: "text-amber-400 border-amber-500/10",
+      description: "A visually-matched digital cookbook with quick bookmarks, intelligent tags, and interactive progress checklists.",
+      accentColor: "rgba(236, 72, 153, 0.8)",
+      borderAccent: "rgba(236, 72, 153, 0.12)",
+      bgAccent: "rgba(236, 72, 153, 0.04)",
     },
   ];
 
   return (
-    <motion.div 
+    <motion.div
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-24 py-12 md:py-20"
+      className="space-y-28 py-10 md:py-16"
     >
-      {/* Hero Section */}
-      <section className="text-center relative max-w-4xl mx-auto space-y-6">
-        <motion.div 
-          variants={itemVariants}
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.02] border border-white/[0.06] text-xs font-semibold text-cyan-400 tracking-wider uppercase mb-1"
-        >
-          <Sparkles className="w-3.5 h-3.5" />
+      {/* ── Hero Section ── */}
+      <section className="text-center relative max-w-4xl mx-auto space-y-7">
+        {/* Decorative glow sphere behind title */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse, rgba(168,85,247,0.08) 0%, rgba(236,72,153,0.04) 50%, transparent 80%)",
+            filter: "blur(40px)",
+          }}
+        />
+
+        <motion.div variants={itemVariants} className="badge mx-auto">
+          <Sparkles className="w-3 h-3" />
           <span>Interactive Culinary Assistant</span>
         </motion.div>
 
-        <motion.h1 
+        <motion.h1
           variants={itemVariants}
-          className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] text-white"
+          className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.04] text-white relative"
+          style={{ letterSpacing: "-0.03em" }}
         >
-          Draft Masterpieces with{" "}
-          <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 bg-clip-text text-transparent">
-            AI Precision
-          </span>
+          Draft Masterpieces{" "}
+          <br className="hidden sm:block" />
+          <span className="gradient-text">with AI Precision</span>
         </motion.h1>
 
-        <motion.p 
+        <motion.p
           variants={itemVariants}
-          className="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto font-normal leading-relaxed"
+          className="text-[15px] sm:text-base max-w-xl mx-auto leading-relaxed text-white"
         >
-          AuraChef is an advanced generative platform crafted for culinary connoisseurs. Bridge the gap between random kitchen ingredients and absolute gastronomical perfection.
+          AuraChef is an advanced generative platform crafted for culinary connoisseurs. Bridge the gap between random kitchen ingredients and gastronomical perfection.
         </motion.p>
 
-        {/* Action CTAs */}
-        <motion.div 
+        {/* CTAs */}
+        <motion.div
           variants={itemVariants}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4 max-w-sm sm:max-w-none mx-auto"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 max-w-sm sm:max-w-none mx-auto"
         >
           <Link
             href="/components/send"
-            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white text-black font-semibold text-sm hover:bg-zinc-200 transition-all duration-300 flex items-center justify-center gap-2 group active:scale-95 shadow-xl shadow-white/5"
+            id="hero-cta-generate"
+            className="gradient-btn w-full sm:w-auto px-7 py-3.5 rounded-xl text-white font-semibold text-sm flex items-center justify-center gap-2 group"
           >
             <span>Start Generating</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
           </Link>
           <Link
             href="/components/getAll"
-            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-zinc-900 border border-white/[0.06] hover:bg-zinc-800 text-white font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 active:scale-95"
+            id="hero-cta-browse"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-xl border border-white/[0.07] bg-white/[0.03] hover:bg-white/[0.05] hover:border-white/[0.12] text-zinc-300 hover:text-white font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2"
           >
             <BookOpen className="w-4 h-4 text-zinc-500" />
             <span>Browse Blueprints</span>
@@ -108,70 +116,108 @@ export default function House() {
         </motion.div>
       </section>
 
-      {/* Terminal Workspace Mockup */}
-      <motion.section 
+      {/* ── Terminal Workspace Mockup ── */}
+      <motion.section
         variants={itemVariants}
-        className="max-w-3xl mx-auto rounded-2xl overflow-hidden border border-white/[0.06] bg-[#0a0a0f]/80 backdrop-blur-md shadow-2xl relative"
+        className="max-w-3xl mx-auto rounded-2xl overflow-hidden relative"
+        style={{
+          background: "rgba(8,9,12,0.90)",
+          border: "1px solid rgba(255,255,255,0.06)",
+          boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(168,85,247,0.06)",
+        }}
       >
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.06] bg-zinc-950/60">
+        {/* Top glow */}
+        <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(168,85,247,0.5) 35%, rgba(34,211,238,0.35) 70%, transparent)" }} />
+
+        {/* Title bar */}
+        <div
+          className="flex items-center justify-between px-5 py-3.5 border-b"
+          style={{ borderColor: "rgba(255,255,255,0.05)", background: "rgba(0,0,0,0.35)" }}
+        >
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-zinc-800" />
-            <span className="w-2.5 h-2.5 rounded-full bg-zinc-800" />
-            <span className="w-2.5 h-2.5 rounded-full bg-zinc-800" />
+            <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }} />
+            <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }} />
+            <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }} />
           </div>
-          <div className="flex items-center gap-1 text-[10px] text-zinc-500 font-mono font-bold tracking-wider uppercase">
-            <Terminal className="w-3.5 h-3.5 text-cyan-500" />
-            <span>aurachef-core-compiler</span>
+          <div className="flex items-center gap-1.5 text-[10px] font-mono font-semibold tracking-widest uppercase" style={{ color: "var(--text-muted)" }}>
+            <Terminal className="w-3 h-3 text-purple-400" />
+            <span>aurachef-core</span>
           </div>
           <div className="w-10" />
         </div>
 
-        <div className="p-6 md:p-8 space-y-5 font-mono text-xs md:text-sm text-zinc-300">
+        {/* Terminal content */}
+        <div className="p-6 md:p-8 space-y-5 font-mono text-[13px] text-zinc-300">
           <div className="flex items-start gap-3">
-            <span className="text-cyan-500 font-semibold select-none">aurachef:~$</span>
-            <p className="text-white leading-relaxed">generate-recipe --ingredients &quot;salmon fillet, asparagus, rosemary, lemon&quot;</p>
-          </div>
-          
-          <div className="space-y-1.5 pl-4 border-l border-zinc-800 text-zinc-400 leading-relaxed">
-            <p className="text-zinc-600">Initializing pairing logic models...</p>
-            <p className="text-zinc-600">Configuring micro-nutrients ratios...</p>
-            <div className="flex items-center gap-2 text-cyan-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-              <span>Drafting: Pan-Seared Salmon with Lemon Rosemary Asparagus</span>
-            </div>
-            <p className="text-zinc-500">Prep: 10 mins  |  Cook: 15 mins  |  Yields: 2 servings</p>
-            <p className="text-zinc-500 font-semibold text-[11px] uppercase tracking-wider text-zinc-600">Calories: 450 kcal  |  Protein: 38g  |  Carbs: 8g  |  Fat: 28g</p>
+            <span className="text-purple-400 font-semibold select-none flex-shrink-0">›</span>
+            <p className="text-white leading-relaxed">
+              generate-recipe --ingredients <span style={{ color: "var(--accent-cyan)" }}>&quot;salmon, asparagus, rosemary, lemon&quot;</span>
+            </p>
           </div>
 
-          <div className="flex items-center gap-2 pl-4 text-emerald-400 font-semibold">
-            <ShieldCheck className="w-4 h-4" />
-            <span>Success: Culinary mapping compiled inside database.</span>
+          <div className="space-y-1.5 pl-4 text-zinc-500 leading-relaxed" style={{ borderLeft: "1px solid rgba(255,255,255,0.05)" }}>
+            <p>Initializing AI pairing models...</p>
+            <p>Configuring micro-nutrient ratios...</p>
+            <div className="flex items-center gap-2" style={{ color: "var(--accent-cyan)" }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping flex-shrink-0" />
+              <span>Drafting: Pan-Seared Salmon with Lemon Rosemary Asparagus</span>
+            </div>
+            <p style={{ color: "rgba(255,255,255,0.25)" }}>Prep: 10 min  ·  Cook: 15 min  ·  Yields: 2 servings</p>
+            <p className="text-[11px] tracking-wider uppercase font-semibold" style={{ color: "rgba(255,255,255,0.18)" }}>
+              Calories: 450 kcal  ·  Protein: 38g  ·  Carbs: 8g  ·  Fat: 28g
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 pl-4 font-semibold text-emerald-400 text-[13px]">
+            <ShieldCheck className="w-4 h-4 flex-shrink-0" />
+            <span>
+              Success — culinary blueprint compiled
+              <span className="cursor-blink ml-0.5">_</span>
+            </span>
           </div>
         </div>
       </motion.section>
 
-      {/* Feature Value Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      {/* ── Feature Cards ── */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
         {featureCards.map((card, index) => {
           const Icon = card.icon;
           return (
             <motion.div
               key={index}
               variants={itemVariants}
-              whileHover={{ y: -4 }}
-              className="p-6 rounded-2xl bg-zinc-900/[0.15] border border-white/[0.04] backdrop-blur-md relative overflow-hidden group hover:border-zinc-800 transition-all duration-300"
+              whileHover={{ y: -5 }}
+              transition={{ type: "spring", stiffness: 300, damping: 28 }}
+              className="glass-card p-6 rounded-2xl relative overflow-hidden"
+              style={{ borderColor: card.borderAccent }}
             >
+              {/* Top accent glow */}
+              <div
+                className="absolute top-0 left-0 right-0 h-px"
+                style={{ background: `linear-gradient(90deg, transparent, ${card.accentColor.replace("0.8", "0.4")} 50%, transparent)` }}
+              />
+
               <div className="relative z-10 space-y-4">
-                <div className={`w-9 h-9 rounded-xl bg-white/[0.02] border ${card.iconColor} flex items-center justify-center`}>
-                  <Icon className="w-4.5 h-4.5" />
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center"
+                  style={{ background: card.bgAccent, border: `1px solid ${card.borderAccent}` }}
+                >
+                  <Icon className="w-4 h-4" style={{ color: card.accentColor }} />
                 </div>
-                <h3 className="text-base font-bold text-white tracking-tight">{card.title}</h3>
-                <p className="text-zinc-400 text-xs leading-relaxed">{card.description}</p>
+                <h3
+                  className="text-sm font-semibold text-white tracking-tight"
+                  style={{ letterSpacing: "-0.01em" }}
+                >
+                  {card.title}
+                </h3>
+                <p className="text-[13px] leading-relaxed" style={{ color: "var(--text-muted)" }}>
+                  {card.description}
+                </p>
               </div>
             </motion.div>
           );
         })}
       </section>
-    </motion.div>
+    </motion.div >
   );
 }

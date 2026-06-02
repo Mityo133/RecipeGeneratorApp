@@ -41,7 +41,7 @@ export default function Button({ mealId }: { mealId: string }) {
 
   if (loading) {
     return (
-      <div className="h-10 w-36 bg-zinc-800/40 rounded-xl animate-pulse border border-white/[0.04]" />
+      <div className="h-10 w-36 bg-purple-100/60 rounded-xl animate-pulse border border-purple-200/30" />
     );
   }
 
@@ -52,13 +52,13 @@ export default function Button({ mealId }: { mealId: string }) {
       onClick={handleToggleFavorite}
       className={`px-5 py-3 rounded-xl font-semibold text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer border ${
         favorited
-          ? "bg-rose-500/10 border-rose-500/30 text-rose-400 shadow-[0_0_20px_-5px_rgba(244,63,94,0.15)] hover:bg-rose-500/20"
-          : "bg-zinc-900 border-white/[0.06] text-zinc-300 hover:text-white hover:bg-zinc-800"
+          ? "bg-pink-100/70 border-pink-300/40 text-pink-700 shadow-[0_0_20px_-5px_rgba(236,72,153,0.2)] hover:bg-pink-200/80 hover:shadow-[0_0_25px_-5px_rgba(236,72,153,0.3)]"
+          : "bg-white/70 border-purple-200/30 text-purple-600 hover:border-purple-400 hover:bg-purple-50/80 hover:text-purple-700 hover:shadow-[0_4px_15px_-3px_rgba(168,85,247,0.15)]"
       }`}
     >
       <Heart
         className={`w-4 h-4 transition-all duration-300 ${
-          favorited ? "fill-rose-500 text-rose-500 scale-110" : "text-zinc-400 group-hover:text-white"
+          favorited ? "fill-pink-500 text-pink-500 scale-110 animate-heartbeat" : "text-purple-500 group-hover:text-purple-600"
         }`}
       />
       <span>{favorited ? "Saved in Cookbook" : "Add to Favorites"}</span>
