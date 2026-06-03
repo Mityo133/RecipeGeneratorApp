@@ -80,7 +80,7 @@ export default function Card({ data }: CardProps) {
           }}
         />
         {/* Dark Vignette Overlay */}
-        <div className={cn('absolute', 'inset-0', 'bg-gradient-to-t', 'from-slate-900/60', 'via-slate-900/20', 'to-transparent')} />
+        <div className={cn('absolute', 'inset-0', 'bg-gradient-to-t', 'from-slate-900', 'via-slate-900/30', 'to-transparent')} />
 
         {/* Floating Accent Title Content */}
         <div className={cn('absolute', 'bottom-0', 'left-0', 'right-0', 'p-6', 'md:p-8', 'space-y-3', 'relative', 'z-10')}>
@@ -94,7 +94,25 @@ export default function Card({ data }: CardProps) {
               );
             })}
           </div>
-          <h1 className={cn('text-2xl', 'md:text-4xl', 'font-extrabold', 'text-slate-800', 'tracking-tight', 'leading-tight', 'relative', 'z-10')}>
+          <h1 className={cn(
+            'text-2xl',
+            'md:text-4xl',
+            'font-extrabold',
+            'tracking-tight',
+            'leading-tight',
+            'relative',
+            'z-10',
+            // Gradient Classes
+            'bg-gradient-to-r',
+            'from-purple-600',
+            'via-blue-500',
+            'via-pink-500',
+            'to-cyan-400',
+            'bg-clip-text',
+            'text-transparent',
+            // FIXED: 4px down, 4px right, 0px blur makes a distinct, solid blocky shadow
+            'drop-shadow-[4px_4px_0px_rgba(0,0,0,1)]'
+          )}>
             {data.recipe.name}
           </h1>
         </div>
@@ -107,7 +125,7 @@ export default function Card({ data }: CardProps) {
       >
         <div className={cn('space-y-1', 'relative')}>
           <span className={cn('text-gray-500', 'text-xs', 'font-semibold', 'uppercase', 'tracking-wider', 'relative', 'z-10')}>Culinary Plan</span>
-          <p className={cn('text-gray-500', 'text-sm', 'font-medium', 'leading-relaxed', 'relative', 'z-10', 'hover:bg-gray-950 hover:text-white')}>
+          <p className={cn('text-gray-500', 'text-sm', 'font-medium', 'leading-relaxed', 'relative', 'z-10',)}>
             Configure this recipe details in your private list database.
           </p>
         </div>
@@ -120,7 +138,7 @@ export default function Card({ data }: CardProps) {
           <Sparkles className={cn('w-3.5', 'h-3.5', 'text-purple-500')} />
           <span className={cn('relative', 'z-10')}>Description Overview</span>
         </h3>
-        <p className={cn('text-slate-600', 'text-lg', 'font-normal', 'leading-relaxed', 'relative', 'z-10', 'text-white')}>
+        <p className={cn('text-slate-100', 'text-lg', 'font-normal', 'leading-relaxed', 'relative', 'z-10', 'text-white')}>
           {data.recipe.description}
         </p>
       </motion.section>
@@ -168,8 +186,8 @@ export default function Card({ data }: CardProps) {
       {/* Macro Nutrition Widgets */}
       <motion.section variants={itemVariants} className="space-y-6">
         <div className="space-y-1">
-          <h3 className={cn('text-slate-600', 'text-xs', 'font-semibold', 'uppercase', 'tracking-wider')}>Macronutrients Blueprint</h3>
-          <p className={cn('text-slate-500', 'text-xs')}>Total nutrition levels mapped per recommended serving.</p>
+          <h3 className={cn('text-whie', 'text-xs', 'font-semibold', 'uppercase', 'tracking-wider')}>Macronutrients Blueprint</h3>
+          <p className={cn('text-whie', 'text-xs')}>Total nutrition levels mapped per recommended serving.</p>
         </div>
 
         <div
@@ -199,19 +217,19 @@ export default function Card({ data }: CardProps) {
                   'surface-card',
                   'hover-lift',
                   'space-y-4',
-                  'text-slate-200',
+                  'text-slate-100',
                   'transition-all',
                   'duration-300'
                 )}
               >
                 <div className={cn('flex', 'items-center', 'justify-between')}>
-                  <span className={cn('text-[10px]', 'text-gray-500', 'font-semibold', 'uppercase', 'tracking-wider', 'relative', 'z-10')}>{macro.label}</span>
+                  <span className={cn('text-[10px]', 'text-white', 'font-semibold', 'uppercase', 'tracking-wider', 'relative', 'z-10')}>{macro.label}</span>
                   <Icon className={`w-4 h-4 ${macro.color}`} />
                 </div>
                 <div className="space-y-1.5">
                   <p className={cn('text-xl', 'font-extrabold', 'text-slate-700', 'tracking-tight', 'relative', 'z-10')}>
                     {macro.value}
-                    <span className={cn('text-xs', 'text-slate-400', 'font-medium', 'ml-0.5', 'relative', 'z-10')}>{macro.value?.includes(macro.suffix) ? "" : macro.suffix}</span>
+                    <span className={cn('text-xs', 'text-white', 'font-medium', 'ml-0.5', 'relative', 'z-10')}>{macro.value?.includes(macro.suffix) ? "" : macro.suffix}</span>
                   </p>
                   <div className={cn('h-1.5', 'w-full', 'bg-slate-200', 'rounded-full', 'overflow-hidden')}>
                     <div className={`h-full ${macro.barColor} rounded-full`} style={{ width: `${percentage}%` }} />
@@ -262,11 +280,10 @@ export default function Card({ data }: CardProps) {
                   )}
                 >
                   <div
-                    className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${
-                      isChecked
-                        ? "bg-cyan-500/20 border-cyan-500 text-cyan-600"
-                        : "border-slate-300 group-hover:border-purple-400"
-                    }`}
+                    className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${isChecked
+                      ? "bg-cyan-500/20 border-cyan-500 text-cyan-600"
+                      : "border-slate-300 group-hover:border-purple-400"
+                      }`}
                   >
                     {isChecked && <CheckCircle2 className={cn('w-3.5', 'h-3.5')} />}
                   </div>
@@ -300,17 +317,15 @@ export default function Card({ data }: CardProps) {
                 <div
                   key={step.stepnumber}
                   onClick={() => toggleStep(step.stepnumber)}
-                  className={`text-white p-5 rounded-sm border transition-all duration-300 cursor-pointer select-none flex gap-4 items-start relative glass-card hover-lift ${
-                    isDone
-                      ? "opacity-60 border-white/20"
-                      : "border-purple-200/40"
-                  }`}
+                  className={`text-white p-5 rounded-sm border transition-all duration-300 cursor-pointer select-none flex gap-4 items-start relative glass-card hover-lift ${isDone
+                    ? "opacity-60 border-white/20"
+                    : "border-purple-200/40"
+                    }`}
                 >
-                  <div className={`w-8 h-8 rounded-full border text-xs font-bold flex items-center justify-center flex-shrink-0 transition-all ${
-                    isDone
-                      ? "bg-gray-900 border-slate-300 text-slate-200"
-                      : "bg-gray-950 border-purple-300 text-slate-700 shadow-md shadow-purple-100/50"
-                  }`}>
+                  <div className={`w-8 h-8 rounded-full border text-xs font-bold flex items-center justify-center flex-shrink-0 transition-all ${isDone
+                    ? "bg-gray-900 border-slate-300 text-slate-200"
+                    : "bg-gray-950 border-purple-300 text-slate-700 shadow-md shadow-purple-100/50"
+                    }`}>
                     {isDone ? <CheckCircle2 className={cn('w-4', 'h-4', 'text-emerald-600')} /> : step.stepnumber}
                   </div>
                   <div className={cn('space-y-1.5', 'pt-0.5', 'relative')}>
@@ -331,7 +346,7 @@ export default function Card({ data }: CardProps) {
       {data.recipe.notes && (
         <motion.section
           variants={itemVariants}
-          className={cn('p-6', 'rounded-sm', 'bg-gray-900','hover:bg-gray-950', 'border', 'border-orange-200/50', 'backdrop-blur-md', 'space-y-3', 'relative')}
+          className={cn('p-6', 'rounded-sm', 'bg-gray-900', 'hover:bg-gray-950', 'border', 'border-orange-200/50', 'backdrop-blur-md', 'space-y-3', 'relative')}
         >
           <h3 className={cn('text-white', 'text-xs', 'font-semibold', 'uppercase', 'tracking-wider', 'flex', 'items-center', 'gap-1.5', 'relative')}>
             <AlertCircle className={cn('w-4', 'h-4')} />
