@@ -9,19 +9,20 @@ if (!supabaseURL || !supabaseKey ) {
   throw Error("No Api Key!");
 }else{
   console.log(process.env.NEXT_PUBLIC_API_KEY);
+  console.log(process.env.NEXT_PUBLIC_BACK_URL);
 }
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
-const host: string = process.env.NEXT_PUBLIC_BACK_URL || "https://backend-1uav.onrender.com/";
+const host: string = process.env.NEXT_PUBLIC_BACK_URL || "https://backend-1uav.onrender.com";
 const api = axios.create({
   baseURL: `${host}`,
   headers: {
     'Content-Type': 'application/json',
     // process.env.BACKEND_API_KEY is safe here because this block runs on the server side
-    'x-api-key':process.env.NEXT_PUBLIC_API_KEY || '', 
+    'x-api-key':process.env.NEXT_PUBLIC_API_KEY || 'Mitko2007@2026_67*', 
   }
 });
 export async function GetAllRecipes() {
