@@ -329,20 +329,27 @@ export async function UserReturn(email: string, password: string) {
 
 export async function PassWordRecovory(email: string) {
     try {
+        // IMPORTANT:
+        // We must redirect to the FRONTEND route (Next.js) so the reset form can call
+        // the backend with the required x-api-key header.
+        const redirectTo = process.env.SUPABASE_RESET_REDIRECT_TO || 'https://auracheffrontend.onrender.com/components/reset-password';
+
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: 'http://localhost:4000/reset-password',
+            redirectTo,
         });
+
         if (error) {
             console.error('PassWordRecovory error:', error);
             return { message: 'Unsuccessful Password Recovery', error: error.message };
-        } else {
-            return { message: 'Recovery email sent successfully' };
         }
+
+        return { message: 'Recovery email sent successfully', data };
     } catch (err: any) {
         console.error('PassWordRecovory exception:', err);
         return { message: 'There has been an error', error: err.message };
     }
 }
+
 export async function ResetPassword(accessToken: string, refreshToken: string, newPassword: string) {
     try {
         if (!accessToken || !refreshToken || !newPassword) {

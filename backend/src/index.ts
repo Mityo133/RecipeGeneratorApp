@@ -501,9 +501,10 @@ app.post("/reset-password", async (req, res) => {
 app.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
     const result = await PassWordRecovory(email);
-    if (result.error) return res.status(400).json(result);
+    if (result?.error) return res.status(400).json(result);
     return res.status(200).json(result);
 });
+
 app.post("/log-in", async (req, res) => {
     const { email, password } = req.body;
     const users = await UserReturn(email, password);

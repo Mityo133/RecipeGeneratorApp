@@ -156,3 +156,32 @@ export async function ForgotPassword(email: string) {
     return { error: errorMsg };
   }
 }
+
+export async function ResetPassword(
+  accessToken: string,
+  refreshToken: string,
+  newPassword: string
+) {
+  try {
+    const fetched = await api.post(`/reset-password`, {
+      accessToken,
+      refreshToken,
+      newPassword,
+    });
+
+    return fetched.data;
+  } catch (error) {
+    const err = error as {
+      response?: { data?: { error?: string } };
+    };
+
+    console.error('ResetPassword error:', err);
+    return {
+      error:
+        err.response?.data?.error ||
+        'Failed to reset password. Please try again.',
+    };
+  }
+}
+
+
