@@ -7,15 +7,17 @@ if (!supabaseURL || !supabaseKey ) {
   // This will now only log if the variables are truly missing from your .env.local file
   console.error("Supabase configuration missing");
   throw Error("No Api Key!");
+}else{
+  console.log(process.env.NEXT_PUBLIC_API_KEY);
 }
 
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
-const host: string = "https://backend-1uav.onrender.com/";
+const host: string = process.env.NEXT_PUBLIC_BACK_URL || "https://backend-1uav.onrender.com/";
 const api = axios.create({
-  baseURL: host,
+  baseURL: `${host}`,
   headers: {
     'Content-Type': 'application/json',
     // process.env.BACKEND_API_KEY is safe here because this block runs on the server side
