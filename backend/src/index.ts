@@ -16,9 +16,9 @@ import path from 'path';
 import {translateToEnglish} from './methods/translating'
 dotenv.config();
 const app = express();
-const originSite = "http://localhost:3000";
+const originSite = "https://auracheffrontend.onrender.com/";
 const port = process.env.PORT || 4000;
-const redo = 'http://localhost:3000/';
+const redo = 'https://auracheffrontend.onrender.com/';
 const ApiKey = process.env.MY_API;
 app.use(express.json({ limit: '10kb' }));
 app.use(cors({ 

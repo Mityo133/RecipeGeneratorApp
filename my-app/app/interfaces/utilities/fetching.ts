@@ -13,7 +13,7 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
-const host: string = "https://recipegeneratorapp.onrender.com/";
+const host: string = "https://backend-1uav.onrender.com";
 const api = axios.create({
   baseURL: host,
   headers: {
