@@ -7,9 +7,6 @@ if (!supabaseURL || !supabaseKey ) {
   // This will now only log if the variables are truly missing from your .env.local file
   console.error("Supabase configuration missing");
   throw Error("No Api Key!");
-}else{
-  console.log(process.env.NEXT_PUBLIC_API_KEY);
-  console.log(process.env.NEXT_PUBLIC_BACK_URL);
 }
 
 export const supabase = createClient(
