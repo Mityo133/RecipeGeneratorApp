@@ -62,9 +62,11 @@ export default function House() {
       {/* ── Hero Section ── */}
       <section className="text-center relative max-w-4xl mx-auto space-y-7">
         {/* Decorative glow sphere behind title */}
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
+          <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none"
           style={{
+            width: "clamp(18rem, 50vw, 37.5rem)",
+            height: "clamp(9rem, 25vw, 18.75rem)",
             background: "radial-gradient(ellipse, rgba(168,85,247,0.08) 0%, rgba(236,72,153,0.04) 50%, transparent 80%)",
             filter: "blur(40px)",
           }}
@@ -77,8 +79,11 @@ export default function House() {
 
         <motion.h1
           variants={itemVariants}
-          className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.04] text-white relative"
-          style={{ letterSpacing: "-0.03em" }}
+          className="font-bold tracking-tight leading-[1.04] text-white relative"
+          style={{
+            fontSize: "clamp(2.25rem, 4.2vw, 4.5rem)",
+            letterSpacing: "-0.03em",
+          }}
         >
           Draft Masterpieces{" "}
           <br className="hidden sm:block" />
@@ -87,7 +92,8 @@ export default function House() {
 
         <motion.p
           variants={itemVariants}
-          className="text-[15px] sm:text-base max-w-xl mx-auto leading-relaxed text-white"
+          className="max-w-xl mx-auto leading-relaxed text-white"
+          style={{ fontSize: "clamp(0.95rem, 1.2vw, 1.05rem)" }}
         >
           AuraChef is an advanced generative platform crafted for culinary connoisseurs. Bridge the gap between random kitchen ingredients and gastronomical perfection.
         </motion.p>
@@ -179,7 +185,13 @@ export default function House() {
       </motion.section>
 
       {/* ── Feature Cards ── */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+      <section
+        className="mx-auto gap-5"
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(16rem, 1fr))",
+        }}
+      >
         {featureCards.map((card, index) => {
           const Icon = card.icon;
           return (

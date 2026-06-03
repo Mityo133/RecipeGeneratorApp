@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import helmet from "helmet";
 import { Recipe } from "./methods/obj";
 import {
     insertRecipe, insertIngridients, insertInstructions, getAllRecipes
@@ -15,10 +16,39 @@ import path from 'path';
 import {translateToEnglish} from './methods/translating'
 dotenv.config();
 const app = express();
+const originSite = "http://localhost:3000";
 const port = process.env.PORT || 4000;
-const redo = 'http://localhost:3000/'
-app.use(express.json());
-app.use(cors({ origin: "*" }));
+const redo = 'http://localhost:3000/';
+const ApiKey = process.env.MY_API;
+app.use(express.json({ limit: '10kb' }));
+app.use(cors({ 
+    origin: `${originSite}`,
+    credentials: true }));
+app.use(helmet());
+//Validation API_KEY
+const validateApiKey = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const apiKey = req.headers['x-api-key'];
+    if (!apiKey) {
+        return res.status(401).json({ error: "Access Denied: API Key is missing." });
+    }
+    if (apiKey !== ApiKey) {
+        return res.status(403).json({ error: "Access Denied: Invalid API Key." });
+    }
+    next();
+};
+app.use(validateApiKey);
+//Rate Limiting
+// 3. GLOBAL RATE LIMITER
+// This applies to absolutely every route defined below it
+const globalRateLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 100,               // Max 100 requests per 15 mins per IP
+    message: { error: "Too many requests. Please try again later." },
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+});
+app.use(globalRateLimiter);
+
 // ─── Swagger / OpenAPI setup ───────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, '../public')))
 const swaggerDefinition = {
