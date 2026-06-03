@@ -515,9 +515,13 @@ app.post("/AddMealToUsersList",async(req,res)=>{
     const datos = await AddFavoriteFood(userId,mealId);
     res.json(datos);
 });
-app.get('/reset-password', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/reset-password.html'));
-});
+// The reset page is now handled by the frontend Next.js app.
+// Keeping the backend HTML route can cause Supabase redirects to land on localhost/old UI.
+// If you still need it for local debugging, enable this route.
+// app.get('/reset-password', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../public/reset-password.html'));
+// });
+
 
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);
