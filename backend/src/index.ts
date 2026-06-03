@@ -22,9 +22,13 @@ const redo = 'https://auracheffrontend.onrender.com/';
 const ApiKey = process.env.MY_API;
 app.use(express.json({ limit: '10kb' }));
 app.use(cors({ 
-    origin: `${originSite}`,
+    origin: `*`,
     credentials: true }));
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  }),
+);
 //Validation API_KEY
 const validateApiKey = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const apiKey = req.headers['x-api-key'];
