@@ -23,7 +23,7 @@ const redo = 'https://auracheffrontend.onrender.com/';
 const ApiKey = process.env.MY_API;
 app.use(express.json({ limit: '10kb' }));
 app.use(cors({
-    origin: originSite,
+    origin:"https://auracheffrontend.onrender.com",
     credentials: true
 }));
 app.use(
