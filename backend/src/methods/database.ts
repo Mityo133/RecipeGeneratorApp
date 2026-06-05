@@ -335,7 +335,7 @@ export async function PassWordRecovory(email: string) {
         // IMPORTANT:
         // We must redirect to the FRONTEND route (Next.js) so the reset form can call
         // the backend with the required x-api-key header.
-        const redirectTo = process.env.SUPABASE_RESET_REDIRECT_TO || 'https://auracheffrontend.onrender.com/components/reset-password';
+        const redirectTo = 'https://auracheffrontend.onrender.com/components/reset-password';
 
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
             redirectTo,
