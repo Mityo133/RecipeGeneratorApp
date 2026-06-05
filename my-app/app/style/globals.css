@@ -116,14 +116,15 @@ body {
 }
 
 /* ─────────────────────────────────────────────
-   GLASS PRIMITIVES — Emil Kowalski signature
+   GLASS PRIMITIVES — Midnight Velvet
 ───────────────────────────────────────────── */
 .glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  background: rgba(9, 9, 11, 0.35);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
   border: 1px solid var(--border);
 }
+
 
 .glass-card {
   background: rgba(255, 255, 255, 0.025);

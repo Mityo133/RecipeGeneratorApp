@@ -68,7 +68,8 @@ export interface ExtractedRecipe {
     carbs: string;
     fat: string;
     notes: string;
-    tags: Tags[]
+    tags: Tags[];
+    user_id?: string;
 }
 export interface FullRecipe {
     recipe: ExtractedRecipe;

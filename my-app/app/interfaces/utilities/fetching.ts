@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { FullRecipe, FavoriteFood, Favorite_Food } from "../obj";
+import { ingridient, instruction } from "../obj";
 const supabaseURL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 import { createClient } from "@supabase/supabase-js";
@@ -13,22 +14,24 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
+
 const host: string = process.env.NEXT_PUBLIC_BACK_URL || "https://backend-1uav.onrender.com";
 const api = axios.create({
   baseURL: `${host}`,
   headers: {
     'Content-Type': 'application/json',
     // process.env.BACKEND_API_KEY is safe here because this block runs on the server side
-    'x-api-key':process.env.NEXT_PUBLIC_API_KEY || 'Mitko2007@2026_67*', 
+    'x-api-key':process.env.NEXT_PUBLIC_API_KEY || 'Mitko2007@2026_67*',
   }
 });
+
 export async function GetAllRecipes() {
   const fetched = await api.get(`/get-all-recipes`);
   const data = fetched.data;
   return data as FullRecipe[];
 }
-export async function SendRecipe(promt: string) {
-  const fetched = await api.post(`/generate-recipe`, { "ingredients": promt });
+export async function SendRecipe(promt: string,user_id:string) {
+  const fetched = await api.post(`/generate-recipe`, { "ingredients": promt , "userID": user_id});
   const data = fetched.data;
   console.log(data);
   return data.doneres;
@@ -180,5 +183,62 @@ export async function ResetPassword(
     };
   }
 }
+export async function DeleteRecipe(recipe_id: string, user_id: string) {
+  try {
+    const { error } = await supabase
+      .from('recipes')
+      .delete()
+      .eq('id', recipe_id)
+      .eq('user_id', user_id);
+
+    if (error) {
+      console.error(error);
+      return false as boolean;
+    }
+    return true as boolean;
+  } catch (error) {
+    console.error(error);
+    return false as boolean;
+  }
+}
+
+export async function UpdateRecipe({
+  recipeId,
+  userId,
+  updated,
+}: {
+  recipeId: string;
+  userId: string;
+  updated: {
+    name: string;
+    description: string;
+    prepTime: string;
+    cookTime: string;
+    totalTime: string;
+    servings: string;
+    calories: string;
+    protein: string;
+    carbs: string;
+    fat: string;
+    notes: string;
+    ingredients: ingridient[];
+    instructions: instruction[];
+    // image_url intentionally omitted (not editable)
+  };
+}) {
+  try {
+    const fetched = await api.put(`/update-recipe`, {
+      recipeId,
+      userId,
+      updated,
+    });
+    return fetched.data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+
 
 

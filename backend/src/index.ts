@@ -9,25 +9,27 @@ import { Recipe } from "./methods/obj";
 import {
     insertRecipe, insertIngridients, insertInstructions, getAllRecipes
     , ExtractByRecipeId, addTag, getAllTags, GetTagByName, PostTagForRecipe
-    , SignUpUser, UserReturn, PassWordRecovory, AddFavoriteFood,ResetPassword, mes
+    , SignUpUser, UserReturn, PassWordRecovory, AddFavoriteFood, ResetPassword, mes,DeleteRecipe, updateRecipe
 } from "./methods/database";
+
 import { generateText } from "./methods/ai";
 import path from 'path';
-import {translateToEnglish} from './methods/translating'
+import { translateToEnglish } from './methods/translating'
 dotenv.config();
 const app = express();
-const originSite = "https://auracheffrontend.onrender.com/";
+const originSite = ["https://auracheffrontend.onrender.com/", "http://localhost:3000"];
 const port = process.env.PORT || 4000;
 const redo = 'https://auracheffrontend.onrender.com/';
 const ApiKey = process.env.MY_API;
 app.use(express.json({ limit: '10kb' }));
-app.use(cors({ 
-    origin: `*`,
-    credentials: true }));
+app.use(cors({
+    origin: originSite,
+    credentials: true
+}));
 app.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-  }),
+    helmet({
+        crossOriginResourcePolicy: false,
+    }),
 );
 //Validation API_KEY
 const validateApiKey = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -205,10 +207,11 @@ app.get("/", (req, res) => {
  */
 app.post("/generate-recipe", async (req, res) => {
     try {
-        const { ingredients } = req.body;
+        const {ingredients,userID} = req.body;
         const result = await translateToEnglish(ingredients)
         const recipe: Recipe = await generateText(result.translation);
-        const recipeId = await insertRecipe(recipe);
+        recipe.user_id = userID;
+        const recipeId = await insertRecipe(recipe, userID);
         await insertIngridients(recipe.ingredients, recipeId);
         await insertInstructions(recipe.instructions, recipeId);
         const doneres = await ExtractByRecipeId(recipeId);
@@ -484,7 +487,6 @@ const limiter = rateLimit({
 app.post("/sign-up", limiter, async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log(email, password);
         const user = await SignUpUser(email, password);
         res.json(user);
     } catch (error) {
@@ -510,9 +512,9 @@ app.post("/log-in", async (req, res) => {
     const users = await UserReturn(email, password);
     res.json(users);
 });
-app.post("/AddMealToUsersList",async(req,res)=>{
-    const {userId,mealId} = req.body;
-    const datos = await AddFavoriteFood(userId,mealId);
+app.post("/AddMealToUsersList", async (req, res) => {
+    const { userId, mealId } = req.body;
+    const datos = await AddFavoriteFood(userId, mealId);
     res.json(datos);
 });
 // The reset page is now handled by the frontend Next.js app.
@@ -521,7 +523,31 @@ app.post("/AddMealToUsersList",async(req,res)=>{
 // app.get('/reset-password', (req, res) => {
 //     res.sendFile(path.join(__dirname, '../public/reset-password.html'));
 // });
+app.delete("/delete-recipe/:recipe_id/:user_id", async (req, res) => {
+    try {
+        const { recipe_id ,user_id} = req.params;
+        const recipe = await DeleteRecipe(recipe_id, user_id);
+        res.json(recipe);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to delete recipe please try a diffrent way!" });
+    }
+});
 
+app.put('/update-recipe', async (req, res) => {
+    try {
+        const { recipeId, userId, updated } = req.body;
+        if (!recipeId || !userId || !updated) {
+            return res.status(400).json({ error: 'recipeId, userId and updated are required' });
+        }
+
+        const result = await updateRecipe(recipeId, userId, updated);
+        res.json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to update recipe' });
+    }
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);

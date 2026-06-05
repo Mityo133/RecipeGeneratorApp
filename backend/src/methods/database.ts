@@ -19,8 +19,9 @@ if (!supabaseURL || !supabaseKey) {
 
 const supabase = createClient(supabaseURL, supabaseKey);
 
-export async function insertRecipe(recipe: Recipe) {
+export async function insertRecipe(recipe: Recipe, user_id: string) {
     try {
+        console.log("In Backend User ID:", user_id);
         const { data, error } = await supabase
             .from('recipes')
             .insert([
@@ -36,10 +37,10 @@ export async function insertRecipe(recipe: Recipe) {
                     "protein": `${recipe.protein}`,
                     "carbs": `${recipe.carbs}`,
                     "fat": `${recipe.fat}`,
-                    "notes": `${recipe.notes}`
+                    "notes": `${recipe.notes}`,
+                    "user_id": `${recipe.user_id}`,
                 },
-            ])
-            .select().single();
+            ]).select().single();
         console.log(data);
         if (error) {
             console.error("Error inserting recipe:", error);
@@ -105,7 +106,8 @@ export async function getAllRecipes() {
             carbs: i.carbs,
             fat: i.fat,
             notes: i.notes,
-            tags: await ExtractTagsForRecipe(i.id)
+            tags: await ExtractTagsForRecipe(i.id),
+            user_id:i.user_id
         })));
         const recipe: FullRecipe[] = await Promise.all(recipes.map(async (res: ExtractedRecipe) => ({
             recipe: res,
@@ -173,7 +175,8 @@ export async function ExtractByRecipeId(id: string) {
             carbs: i.carbs,
             fat: i.fat,
             notes: i.notes,
-            tags: i.tags || []
+            tags: i.tags || [],
+            user_id: i.user_id,
         }));
         console.log(recipe);
         const recipes: FullRecipe[] = await Promise.all(recipe.map(async (res: ExtractedRecipe) => ({
@@ -398,6 +401,120 @@ export async function AddFavoriteFood(userId: string, mealId: string) {
     } catch (err) {
         return {
             message: "The recipe was not added to your list"
+        }
+    }
+}
+export async function updateRecipe(
+    recipeId: string,
+    user_id: string,
+    updated: Omit<Recipe, 'user_id' | 'imageURL'> & {
+        image_url?: string; // ignored; image is not editable
+    }
+) {
+    try {
+        // update main recipe (ownership enforced)
+        const { data: updatedRecipe, error: recipeErr } = await supabase
+            .from('recipes')
+            .update({
+                name: updated.name,
+                description: updated.description,
+                prep_time: updated.prepTime,
+                cook_time: updated.cookTime,
+                total_time: updated.totalTime,
+                servings: updated.servings,
+                calories: updated.calories,
+                protein: updated.protein,
+                carbs: updated.carbs,
+                fat: updated.fat,
+                notes: updated.notes,
+            })
+            .eq('id', recipeId)
+            .eq('user_id', user_id)
+            .select()
+            .single();
+
+        if (recipeErr || !updatedRecipe) {
+            return {
+                message: "A recipe could not be updated",
+                Err: recipeErr,
+            };
+        }
+
+        // replace ingredients
+        const { error: delIngErr } = await supabase
+            .from('ingridients_recipe')
+            .delete()
+            .eq('recipe_id', recipeId);
+
+        if (delIngErr) {
+            return { message: "Could not replace ingredients", Err: delIngErr };
+        }
+
+        const ingFormatted = updated.ingredients.map((i) => ({
+            recipe_id: recipeId,
+            item: i.item,
+            quantity: i.quantity,
+        }));
+
+        const { error: insIngErr } = await supabase
+            .from('ingridients_recipe')
+            .insert(ingFormatted);
+
+        if (insIngErr) {
+            return { message: "Could not replace ingredients", Err: insIngErr };
+        }
+
+        // replace instructions
+        const { error: delInsErr } = await supabase
+            .from('instruction_recipe')
+            .delete()
+            .eq('recipe_id', recipeId);
+
+        if (delInsErr) {
+            return { message: "Could not replace instructions", Err: delInsErr };
+        }
+
+        const insFormatted = updated.instructions.map((i) => ({
+            recipe_id: recipeId,
+            step_number: i.stepnumber,
+            description: i.description,
+        }));
+
+        const { error: insInsErr } = await supabase
+            .from('instruction_recipe')
+            .insert(insFormatted);
+
+        if (insInsErr) {
+            return { message: "Could not replace instructions", Err: insInsErr };
+        }
+
+        return { message: "A recipe has been updated" };
+    } catch (err) {
+        console.error(err);
+        return { message: "The recipe was not updated" };
+    }
+}
+
+export async function DeleteRecipe(recipeId: string,user_id:string) {
+    try {
+        const { data, error } = await supabase
+            .from('recipes')
+            .delete()
+            .eq('id', recipeId).eq('user_id', user_id);
+        if (error) {
+            return {
+                message: "A recipe could not be deleted",
+                Err: error
+            }
+        } else {
+            return {
+                message: "A recipe has been deleted"
+            }
+        }
+
+    } catch (err) {
+        return {
+            message: "The recipe was not deleted"
         }
     }
 }

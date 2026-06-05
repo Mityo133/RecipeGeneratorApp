@@ -69,7 +69,7 @@ export async function generateText(prompt: string) {
     const answer = answerss;
     if (answer) {
         const parse: Recipe = JSON.parse(answer);
-        const image = await getPexelsImage(parse.name)
+        const image = await getPexelsImage(parse.name);
         const lll: Recipe =
         {
             name: parse.name,
@@ -87,7 +87,7 @@ export async function generateText(prompt: string) {
             fat: parse.fat,
             notes: parse.notes,
             tags: parse.tags
-        }
+        };
         return lll;
     }
     else {
