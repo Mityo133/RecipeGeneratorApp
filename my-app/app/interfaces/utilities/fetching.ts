@@ -15,7 +15,7 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-const host: string = process.env.NEXT_PUBLIC_BACK_URL || "https://backend-1uav.onrender.com";
+const host: string = "https://backend-1uav.onrender.com";
 const api = axios.create({
   baseURL: `${host}`,
   headers: {
